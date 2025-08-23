@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,8 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +53,8 @@ fun ProfileScreen() {
         )
         Spacer(modifier = Modifier.height(4.dp))
         ProfileSection()
+        Spacer(modifier = Modifier.height(25.dp))
+        ButtonSection(modifier = Modifier.fillMaxWidth())
     }
 }
 
@@ -231,6 +237,78 @@ fun ProfileDescription(
                 },
                 letterSpacing = letterSpacing,
                 lineHeight = lineHeight
+            )
+        }
+    }
+}
+
+
+@Composable
+fun ButtonSection(
+    modifier: Modifier = Modifier
+) {
+    val minWidth = 95.dp
+    val height = 30.dp
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier
+    ) {
+        ActionButton(
+            text = "Following",
+            icon = Icons.Default.KeyboardArrowDown,
+            modifier = Modifier
+                .defaultMinSize(minWidth = minWidth)
+                .height(height)
+        )
+        ActionButton(
+            text = "Message",
+            modifier = Modifier
+                .defaultMinSize(minWidth = minWidth)
+                .height(height)
+        )
+        ActionButton(
+            text = "Email",
+            modifier = Modifier
+                .defaultMinSize(minWidth = minWidth)
+                .height(height)
+        )
+        ActionButton(
+            icon = Icons.Default.KeyboardArrowDown,
+            modifier = Modifier
+                .size(height)
+        )
+    }
+}
+
+@Composable
+fun ActionButton(
+    modifier: Modifier = Modifier,
+    text: String? = null,
+    icon: ImageVector? = null
+) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = Color.LightGray,
+                shape = RoundedCornerShape(5.dp)
+            )
+            .padding(5.dp)
+    ) {
+        if(text != null) {
+            Text(
+                text = text,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp
+            )
+        }
+        if(icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = Color.Black
             )
         }
     }
