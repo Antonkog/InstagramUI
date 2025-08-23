@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,14 +32,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import instagramui.composeapp.generated.resources.Res
 import instagramui.composeapp.generated.resources.anton
+import instagramui.composeapp.generated.resources.h1
+import instagramui.composeapp.generated.resources.h2
+import instagramui.composeapp.generated.resources.h3
+import instagramui.composeapp.generated.resources.h4
 import instagramui.composeapp.generated.resources.ic_bell
 import instagramui.composeapp.generated.resources.ic_dotmenu
 import org.jetbrains.compose.resources.painterResource
@@ -55,6 +62,30 @@ fun ProfileScreen() {
         ProfileSection()
         Spacer(modifier = Modifier.height(25.dp))
         ButtonSection(modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(25.dp))
+        HighlightSection(
+            highlights = listOf(
+                ImageWithText(
+                    image = painterResource(Res.drawable.h1),
+                    text = "Zurich"
+                ),
+                ImageWithText(
+                    image = painterResource(Res.drawable.h2),
+                    text = "Milan"
+                ),
+                ImageWithText(
+                    image = painterResource(Res.drawable.h3),
+                    text = "Museum"
+                ),
+                ImageWithText(
+                    image = painterResource(Res.drawable.h4),
+                    text = "Other"
+                ),
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+        )
     }
 }
 
@@ -107,7 +138,7 @@ fun ProfileSection(
                 .padding(horizontal = 20.dp)
         ) {
             RoundImage(
-                image = painterResource( Res.drawable.anton),
+                image = painterResource(Res.drawable.anton),
                 modifier = Modifier
                     .size(100.dp)
                     .weight(3f)
@@ -118,8 +149,8 @@ fun ProfileSection(
         ProfileDescription(
             displayName = "Mister Kogan",
             description =
-                    "Toastagram creator\n" +
-                    "Recognised Artist",
+                "Toastagram creator\n" +
+                        "Recognised Artist",
             url = "https://antonkogan.de",
             followedBy = listOf("leomessi", "beyonce"),
             otherCount = 17
@@ -135,6 +166,7 @@ fun RoundImage(
     Image(
         painter = image,
         contentDescription = null,
+        contentScale = ContentScale.Crop,
         modifier = modifier
             .aspectRatio(1f, matchHeightConstraintsFirst = true)
             .border(
@@ -143,6 +175,7 @@ fun RoundImage(
                 shape = CircleShape
             )
             .padding(3.dp)
+            .size(88.dp)
             .clip(CircleShape)
     )
 }
@@ -213,7 +246,7 @@ fun ProfileDescription(
             letterSpacing = letterSpacing,
             lineHeight = lineHeight
         )
-        if(followedBy.isNotEmpty()) {
+        if (followedBy.isNotEmpty()) {
             Text(
                 text = buildAnnotatedString {
                     val boldStyle = SpanStyle(
@@ -225,11 +258,11 @@ fun ProfileDescription(
                         pushStyle(boldStyle)
                         append(name)
                         pop()
-                        if(index < followedBy.size - 1) {
+                        if (index < followedBy.size - 1) {
                             append(", ")
                         }
                     }
-                    if(otherCount > 2) {
+                    if (otherCount > 2) {
                         append(" and ")
                         pushStyle(boldStyle)
                         append("$otherCount others")
@@ -297,19 +330,46 @@ fun ActionButton(
             )
             .padding(5.dp)
     ) {
-        if(text != null) {
+        if (text != null) {
             Text(
                 text = text,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp
             )
         }
-        if(icon != null) {
+        if (icon != null) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = Color.Black
             )
+        }
+    }
+}
+
+@Composable
+fun HighlightSection(
+    modifier: Modifier = Modifier,
+    highlights: List<ImageWithText>
+) {
+    LazyRow(modifier = modifier) {
+        items(highlights.size) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .padding(end = 15.dp)
+            ) {
+                RoundImage(
+                    image = highlights[it].image,
+                    modifier = Modifier.size(70.dp)
+                )
+                Text(
+                    text = highlights[it].text,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
