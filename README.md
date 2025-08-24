@@ -1,16 +1,44 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Instagram UI with Kotlin Multiplatform and Compose Multiplatform
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+This project demonstrates how to use Kotlin Multiplatform together with Compose Multiplatform to create a cross-platform UI application that runs on both Android and iOS.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Project Overview
 
+The goal of this project is to showcase the capabilities of Kotlin Multiplatform and Compose Multiplatform by implementing a simplified Instagram profile UI clone. The application features:
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+- A single UI screen (ProfileScreen) that mimics Instagram's profile page
+- Hardcoded strings and images for simplicity
+- Cross-platform UI implementation that works on both Android and iOS
+
+## Screenshots
+
+| Android                                                                                   | iOS                                                   |
+|-------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| <img src="screenshot_android.png" alt="Android Screenshot" height="1024px"/> | <img src="screenshot_ios.png" alt="iOS Screenshot" height="1024px"/> |
+
+## Implementation Details
+
+This project intentionally uses a simple approach:
+- No architectural patterns like MVI were used
+- No ViewModel layer was implemented
+- Just a direct UI implementation with Compose Multiplatform
+
+The UI includes common Instagram profile elements:
+- Profile header with user information
+- Stats section (posts, followers, following)
+- Action buttons (Following, Message, etc.)
+- Story highlights
+- Post grid view
+
+## Project Structure
+
+* [/composeApp](./composeApp/src) contains the shared code for Compose Multiplatform applications:
+  - [commonMain](./composeApp/src/commonMain/kotlin) has the shared UI implementation
+  - Platform-specific code is in the respective platform folders
+
+* [/iosApp](./iosApp) contains the iOS application entry point
+
+## Learn More
+
+- [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)
+- [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
