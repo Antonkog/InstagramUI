@@ -18,17 +18,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,11 +57,25 @@ import instagramui.composeapp.generated.resources.h3
 import instagramui.composeapp.generated.resources.h4
 import instagramui.composeapp.generated.resources.ic_bell
 import instagramui.composeapp.generated.resources.ic_dotmenu
+import instagramui.composeapp.generated.resources.ic_grid
+import instagramui.composeapp.generated.resources.ic_plus
+import instagramui.composeapp.generated.resources.ic_profile
+import instagramui.composeapp.generated.resources.ic_reels
+import instagramui.composeapp.generated.resources.pic1
+import instagramui.composeapp.generated.resources.pic2
+import instagramui.composeapp.generated.resources.pic3
+import instagramui.composeapp.generated.resources.pic4
+import instagramui.composeapp.generated.resources.pic5
+import instagramui.composeapp.generated.resources.pic6
+import instagramui.composeapp.generated.resources.pic7
+import instagramui.composeapp.generated.resources.pic8
+import instagramui.composeapp.generated.resources.pic9
 import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
 fun ProfileScreen() {
+    var selectedTabIndex by remember { mutableStateOf(0) }
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             "Anton Kogan", modifier = Modifier
@@ -79,13 +102,54 @@ fun ProfileScreen() {
                 ),
                 ImageWithText(
                     image = painterResource(Res.drawable.h4),
-                    text = "Other"
+                    text = "Auto"
                 ),
+                ImageWithText(
+                    image = painterResource(Res.drawable.ic_plus),
+                    text = "New"
+                )
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
         )
+        Spacer(modifier = Modifier.height(10.dp))
+
+        PostTabView(
+            imageWithTexts = listOf(
+                ImageWithText(
+                    image = painterResource(Res.drawable.ic_grid),
+                    text = "Posts"
+                ),
+                ImageWithText(
+                    image = painterResource(Res.drawable.ic_reels),
+                    text = "Reels"
+                ),
+                ImageWithText(
+                    image = painterResource(Res.drawable.ic_profile),
+                    text = "Profile"
+                )
+            )
+        ) {
+            selectedTabIndex = it
+        }
+
+        when (selectedTabIndex) {
+            0 -> PostSection(
+                posts = listOf(
+                    painterResource(Res.drawable.pic1),
+                    painterResource(Res.drawable.pic2),
+                    painterResource(Res.drawable.pic3),
+                    painterResource(Res.drawable.pic4),
+                    painterResource(Res.drawable.pic5),
+                    painterResource(Res.drawable.pic6),
+                    painterResource(Res.drawable.pic7),
+                    painterResource(Res.drawable.pic8),
+                    painterResource(Res.drawable.pic9),
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 
@@ -148,10 +212,8 @@ fun ProfileSection(
         }
         ProfileDescription(
             displayName = "Mister Kogan",
-            description =
-                "Toastagram creator\n" +
-                        "Recognised Artist",
-            url = "https://antonkogan.de",
+            description = "Recognised Artist",
+            url = "https://antonkogan.it",
             followedBy = listOf("leomessi", "beyonce"),
             otherCount = 17
         )
@@ -170,12 +232,12 @@ fun RoundImage(
         modifier = modifier
             .aspectRatio(1f, matchHeightConstraintsFirst = true)
             .border(
-                width = 1.dp,
+                width = 2.dp,
                 color = Color.LightGray,
                 shape = CircleShape
             )
             .padding(3.dp)
-            .size(88.dp)
+            .size(80.dp)
             .clip(CircleShape)
     )
 }
@@ -370,6 +432,72 @@ fun HighlightSection(
                     textAlign = TextAlign.Center
                 )
             }
+        }
+    }
+}
+
+
+@Composable
+fun PostTabView(
+    modifier: Modifier = Modifier,
+    imageWithTexts: List<ImageWithText>,
+    onTabSelected: (selectedIndex: Int) -> Unit
+) {
+    var selectedTabIndex by remember {
+        mutableStateOf(0)
+    }
+    val inactiveColor = Color(0xFF777777)
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        containerColor = Color.Transparent,
+        contentColor = Color.Black,
+        modifier = modifier
+    ) {
+        imageWithTexts.forEachIndexed { index, item ->
+            Tab(
+                selected = selectedTabIndex == index,
+                selectedContentColor = Color.Black,
+                unselectedContentColor = inactiveColor,
+                onClick = {
+                    selectedTabIndex = index
+                    onTabSelected(index)
+                }
+            ) {
+                Icon(
+                    painter = item.image,
+                    contentDescription = item.text,
+                    tint = if (selectedTabIndex == index) Color.Black else inactiveColor,
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(20.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PostSection(
+    posts: List<Painter>,
+    modifier: Modifier = Modifier
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = modifier
+            .scale(1.01f)
+    ) {
+        items(posts.size) {
+            Image(
+                painter = posts[it],
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(
+                        width = 2.dp,
+                        color = Color.LightGray
+                    )
+            )
         }
     }
 }
